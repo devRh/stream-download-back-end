@@ -1,0 +1,23 @@
+{
+  "name": "streamdownloadback",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devRh/streamDownloadBack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devRh/streamDownloadBack/issues"
+  },
+  "homepage": "https://github.com/devRh/streamDownloadBack#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
