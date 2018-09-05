@@ -1,13 +1,14 @@
+require('dotenv').config({path: './.env.development.local'});
 var express = require('express'),
   app = express(),
-  port = process.env.PORT || 5555,
+  port = process.env.PORT,
   mongoose = require('mongoose'),
   TaxiTrips = require('./api/models/taxiTripModel'), //created model loading here
   bodyParser = require('body-parser');
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://rh.rh:zefzvdnhvzdv123148vsd5sko@ds135952.mlab.com:35952/taxi-trip',{ useNewUrlParser: true }); 
+mongoose.connect(process.env.DB_URI,{ useNewUrlParser: true }); 
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,3 +23,4 @@ app.listen(port);
 
 
 console.log('taxi trip RESTful API server started on: ' + port);
+
