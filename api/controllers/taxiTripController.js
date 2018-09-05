@@ -64,15 +64,28 @@ exports.filterByVendorID_taxiTrips = (req, res) => {
   query.skip = size * (pageNo - 1)
   query.limit = size
     // Find some documents
-  TaxiTrips.find({VendorID:VendorID},{},query,function(err,data) {
-    // Mongo command to fetch all data from collection.
-    if(err) {
-      var response = {"error" : true,"message" : "Error fetching data"};
-    } else {
-      var response = {data};
-    }
-    res.json(response);
-  });
+  if (VendorID){
+    TaxiTrips.find({VendorID:VendorID},{},query,function(err,data) {
+      // Mongo command to fetch all data from collection.
+      if(err) {
+        var response = {"error" : true,"message" : "Error fetching data"};
+      } else {
+        var response = {data};
+      }
+      res.json(response);
+    });
+  }else{
+    TaxiTrips.find({},{},query,function(err,data) {
+      // Mongo command to fetch all data from collection.
+      if(err) {
+        var response = {"error" : true,"message" : "Error fetching data"};
+      } else {
+        var response = {data};
+      }
+      res.json(response);
+    });
+
+  }  
 
 };
 
