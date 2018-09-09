@@ -100,8 +100,6 @@ exports.sortByVendorID_taxiTrips = (req, res) => {
   query.skip = size * (pageNo - 1)
   query.limit = size
   query.sort = "VendorID"
-  console.log('------'+query)
-
     // Find some documents
   TaxiTrips.find({},{},query,function(err,data) {
     // Mongo command to fetch all data from collection.
