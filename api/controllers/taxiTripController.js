@@ -38,14 +38,14 @@ exports.pagination_taxiTrips = (req, res) => {
   TaxiTrips.count({},function(err,totalCount) {
     if(err) {
       var response = {"error" : true,"message" : "Error fetching data"}
+      return res.json(response);
     }
     TaxiTrips.find({},{},query,function(err,data) {
       // Mongo command to fetch all data from collection.
       if(err) {
         var response = {"error" : true,"message" : "Error fetching data"};
       } else {
-        var totalPages = Math.ceil(totalCount / size)
-        var response = {"pages": totalPages,data};
+        var response = {"count": totalCount,data};
       }
       res.json(response);
     });
