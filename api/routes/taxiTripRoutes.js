@@ -3,26 +3,13 @@ module.exports = function(app) {
   var taxiTrip = require('../controllers/taxiTripController');
 
   // taxiTrip Routes
-
-
   
   app.route('/taxiTrips')
-    .get(taxiTrip.pagination_taxiTrips)   
-    
-  app.route('/taxiTrips')
-    .get(taxiTrip.list_all_taxiTrips)
-  
-  app.route('/taxiTrips/filter')
-    .get(taxiTrip.filterByVendorID_taxiTrips)
-  
-  app.route('/taxiTrips/sort')
-    .get(taxiTrip.sortByVendorID_taxiTrips)  
+    .get(taxiTrip.paginationTaxiTrips)   
   
   app.route('/taxiTrips/:taxiTripId')
-    .get(taxiTrip.read_a_taxiTrip)
-
-  
-
+    .get(taxiTrip.readOneTaxiTrip)
+ 
   //default routes  
 
   app.route('/').get((req, res, next) => {

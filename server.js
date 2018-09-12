@@ -1,14 +1,15 @@
 require('dotenv').config({path: './.env.development.local'});
+require('./api/models/taxiTripModel');  
+
 var cors = require('cors');
 var express = require('express'),
   app = express(),
   port = process.env.PORT,
   mongoose = require('mongoose'),
-  TaxiTrips = require('./api/models/taxiTripModel'), //created model loading here
   bodyParser = require('body-parser');
 
 app.use(cors())  
-// mongoose instance connection url connection
+
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URI,{ useNewUrlParser: true }); 
 
