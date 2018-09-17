@@ -7,8 +7,14 @@ TaxiTrips = mongoose.model('TaxiTrips');
 exports.readOneTaxiTrip = function (req, res) {
   TaxiTrips.findById(req.params.taxiTripId, function (err, taxiTrip) {
     if (err)
-      res.send(err);
+      res
+      .status(404)
+      .json({ message: "No valid entry found for Taxi trip ID" });
+
     res.json(taxiTrip);
+  }).catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err });
   });
 };
 
@@ -33,10 +39,11 @@ exports.paginationTaxiTrips = function (req, res) {
       condition.VendorID = filterByVendorID;
     }
   }
-
-  if (pageNo < 0 || pageNo === 0) {
-    response = { "error": true, "message": "invalid page number, should start with 1" };
-    return res.json(response)
+  
+  if (pageNo <= 0) {
+    res
+    .status(404)
+    .json({ message: "No valid entry found for provided ID" });
   }
 
   option.skip = size * (pageNo - 1)
@@ -45,17 +52,22 @@ exports.paginationTaxiTrips = function (req, res) {
 
   TaxiTrips.count(condition, function (err, totalCount) {
     if (err) {
-      var response = { "error": true, "message": "Error fetching data" }
-      return res.json(response);
+      res
+      .status(404)
+      .json({ message: "Error fetching data" });
     }
     TaxiTrips.find(condition, {}, option, function (err, data) {
       if (err) {
-        var response = { "error": true, "message": "Error fetching data" };
+        res
+        .status(404)
+        .json({ message: "Error fetching data" });
       } else {
-        var response = { "count": totalCount, data };
+        res.status(200).json({ "count": totalCount, data });
       }
-      res.json(response);
     });
+  }).catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err });
   });
 };
 

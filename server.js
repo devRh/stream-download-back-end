@@ -1,7 +1,9 @@
 require('dotenv').config({path: './.env.development.local'});
 require('./api/models/taxiTripModel');  
 
+var taxiTripRoutes = require('./api/routes/taxiTripRoutes'); //importing route
 var cors = require('cors');
+var morgan = require('morgan');
 var express = require('express'),
   app = express(),
   port = process.env.PORT,
@@ -9,6 +11,7 @@ var express = require('express'),
   bodyParser = require('body-parser');
 
 app.use(cors())  
+app.use(morgan("dev"));
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URI,{ useNewUrlParser: true }); 
@@ -17,9 +20,22 @@ mongoose.connect(process.env.DB_URI,{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use(taxiTripRoutes);
 
-var routes = require('./api/routes/taxiTripRoutes'); //importing route
-routes(app); //register the route
+app.use((req, res, next) => {
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message
+    }
+  });
+});
 
 
 app.listen(port);

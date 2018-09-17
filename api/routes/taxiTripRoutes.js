@@ -1,23 +1,15 @@
 'use strict';
-module.exports = function(app) {
-  var taxiTrip = require('../controllers/taxiTripController');
 
+  var taxiTrip = require('../controllers/taxiTripController');
+  var express = require("express");
+  var router = express.Router();
   // taxiTrip Routes
   
-  app.route('/taxiTrips')
-    .get(taxiTrip.paginationTaxiTrips)   
-  
-  app.route('/taxiTrips/:taxiTripId')
-    .get(taxiTrip.readOneTaxiTrip)
- 
-  //default routes  
 
-  app.route('/').get((req, res, next) => {
-      res.send('server start on : "/" route')
-  });  
+  router.get("/taxiTrips", taxiTrip.paginationTaxiTrips);
 
-  app.route('*').get((req, res, next) => {
-    res.redirect('/');
-  });
+  router.get("/taxiTrips/:taxiTripId", taxiTrip.readOneTaxiTrip);
 
-};
+
+
+  module.exports = router;
