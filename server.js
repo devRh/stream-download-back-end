@@ -1,5 +1,5 @@
-require('dotenv').config({path: './.env.development.local'});
-require('./api/models/taxiTripModel');  
+require('dotenv').config({ path: './.env.development.local' });
+require('./api/models/taxiTripModel');
 
 var taxiTripRoutes = require('./api/routes/taxiTripRoutes'); //importing route
 var cors = require('cors');
@@ -10,11 +10,12 @@ var express = require('express'),
   mongoose = require('mongoose'),
   bodyParser = require('body-parser');
 
-app.use(cors())  
+
+app.use(cors())
 app.use(morgan("dev"));
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DB_URI,{ useNewUrlParser: true }); 
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true });
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
