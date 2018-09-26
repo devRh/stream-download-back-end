@@ -81,29 +81,37 @@ exports.paginationTaxiTrips = function (req, res) {
 
 exports.allTaxiTripDownload = function (req, res) {
   let cursorCount = 0;
-  const cursor = TaxiTrips.find({}, {}, { limit: 10000 }).cursor();
+  const cursor = TaxiTrips.find({}, {}, { limit: 55 }).lean().cursor();
   res.header("Content-Disposition", "attachment; filename=\"data.xls\"");
-  cursor.on('data', (doc) => {
+  cursor.on('data', (obj) => {
     cursorCount = cursorCount + 1;
-    if ((doc) && (cursorCount != 1)) {
-      res.write(Buffer.from(
-        doc.VendorID
+    if ((obj) && (cursorCount != 1)) {
+      res.write(
+        obj.VendorID
         + ","
-        + doc.PULocationID
+        + obj.PULocationID
         + ","
-        + doc.DOLocationID
-        + "\n")
+        + obj.DOLocationID
+        + "\n"
       );
       null
-    } else if ((doc) && (cursorCount == 1)) {
-      res.write(Buffer.from(("Vendor-id" + "," + "Pick-up location" + "," + "Drop-off location" + "\n"), 'utf8'));
-      res.write(Buffer.from(
-        doc.VendorID
+    } else if ((obj) && (cursorCount == 1)) {
+      res.write(
+        "Vendor-id"
         + ","
-        + doc.PULocationID
+        + "Pick-up location"
         + ","
-        + doc.DOLocationID
-        + "\n"));
+        + "Drop-off location"
+        + "\n"
+      );
+      res.write(
+        obj.VendorID
+        + ","
+        + obj.PULocationID
+        + ","
+        + obj.DOLocationID
+        + "\n"
+      );
     }
   }
   )

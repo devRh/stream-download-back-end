@@ -76,8 +76,8 @@ var TaxiTripSchema = new Schema({
     default: null
   },
 
-}, { collection: 'testFor100Docs' });
-// yellowTaxiTripData
+}, { collection: 'yellowTaxiTripData' });
+  //  testFor100Docs
 
 module.exports = mongoose.model('TaxiTrips', TaxiTripSchema);
 

@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.get("/taxiTrips", taxiTrip.paginationTaxiTrips);
 
-router.get("/taxiTrips/download", taxiTrip.allTaxiTripDownload);
+router.get("/taxiTrips/download", taxiTrip.allTaxiTripDownload);// in heroku taxitrips
 
 router.get("/taxiTrips/:taxiTripId", taxiTrip.readOneTaxiTrip);
 
