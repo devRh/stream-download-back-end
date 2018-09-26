@@ -81,7 +81,7 @@ exports.paginationTaxiTrips = function (req, res) {
 
 exports.allTaxiTripDownload = function (req, res) {
   let cursorCount = 0;
-  const cursor = TaxiTrips.find({}, {}, { limit: 55 }).lean().cursor();
+  const cursor = TaxiTrips.find({}, {}, { limit: 100000 }).lean().cursor();
   res.header("Content-Disposition", "attachment; filename=\"data.xls\"");
   cursor.on('data', (obj) => {
     cursorCount = cursorCount + 1;
