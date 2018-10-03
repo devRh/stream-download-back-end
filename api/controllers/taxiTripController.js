@@ -14,7 +14,6 @@ exports.readOneTaxiTrip = function (req, res) {
 
     res.json(taxiTrip);
   }).catch(err => {
-    console.log(err);
     res.status(500).json({ error: err });
   });
 };
@@ -25,7 +24,6 @@ exports.paginationTaxiTrips = function (req, res) {
   var option = {};
 
   var pageNo = parseInt(req.query.pageNo)
-  console.log(pageNo);
   var size = parseInt(req.query.size)
 
   var sortByPickUpLocation = parseInt(req.query.sortByPickUpLocation)
@@ -73,7 +71,6 @@ exports.paginationTaxiTrips = function (req, res) {
       }
     });
   }).catch(err => {
-    console.log(err);
     res.status(500).json({ error: err });
   });
 };
@@ -81,34 +78,45 @@ exports.paginationTaxiTrips = function (req, res) {
 
 exports.allTaxiTripDownload = function (req, res) {
   res.setHeader("Content-Disposition", "attachment; filename=\"data.xls\"");
-  res.setHeader('Transfer-Encoding', "chunked" );
-  res.setHeader('Content-Length', "6450000" );
-  res.write(
-    "Vendor-id"
-    + ","
-    + "Pick-up location"
-    + ","
-    + "Drop-off location"
-    + "\n"
-  );
-  const cursor = TaxiTrips.find({}, { _id: 0, VendorID: 1, PULocationID: 1, DOLocationID: 1 }).limit(645000).lean().cursor();
-  cursor.on('data', (obj) => {
-    res.write(
-      obj.VendorID
-      + ","
-      + obj.PULocationID
-      + ","
-      + obj.DOLocationID
-      + "\n"
-    );
-  }
-  )
-  cursor.on('close', () => {
-    res.status(200).end();
-  });
-
+  res.setHeader('Transfer-Encoding', "chunked");
+  let limitEst = 10
+  TaxiTrips.find({}, { _id: 0, VendorID: 1, PULocationID: 1, DOLocationID: 1 })
+    .limit(limitEst)
+    .lean()
+    .exec(function (err, docs) {
+      let estimate = Math.ceil(((docs.reduce((acc, doc) => {
+        return acc + Buffer.byteLength(Object.values(doc).join(""), 'utf8');
+      }, 0)) +
+        (Object.keys(docs[0]).length * limitEst)) / limitEst);
+      TaxiTrips.count((err, totalCount) => {
+        let contentLength = String(totalCount * estimate);
+        res.setHeader('Content-Length', contentLength);
+        res.write(
+          "Vendor-id"
+          + ","
+          + "Pick-up location"
+          + ","
+          + "Drop-off location"
+          + "\n"
+        );
+        const cursor = TaxiTrips.find({}, { _id: 0, VendorID: 1, PULocationID: 1, DOLocationID: 1 }).lean().cursor();
+        cursor.on('data', (obj) => {
+          res.write(
+            obj.VendorID
+            + ","
+            + obj.PULocationID
+            + ","
+            + obj.DOLocationID
+            + "\n"
+          );
+        }
+        )
+        cursor.on('close', () => {
+          res.status(200).end();
+        });
+      })
+    })
 };
-
 
 
 
