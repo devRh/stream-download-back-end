@@ -1,6 +1,6 @@
 require('dotenv').config({ path: './.env.development.local' });
 require('./api/models/taxiTripModel');
-//test
+//test 1
 var taxiTripRoutes = require('./api/routes/taxiTripRoutes'); //importing route
 var cors = require('cors');
 var morgan = require('morgan');
